@@ -15,18 +15,21 @@ import (
 var (
 	listenAddress = kingpin.Flag("web.listen-address", "Address on which to expose metrics and web interface.").Default(":9342").String()
 	telemetryPath = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
+	frrVTYSHPath  = kingpin.Flag("frr.vtysh.path", "Path of vtysh.").Default("/usr/bin/vtysh").String()
 
-	collectorEnabledState = map[collector.Collector]*bool{}
-
-	collectors = []collector.Collector{
-		new(collector.BGPCollector),
-		new(collector.OSPFCollector),
+	collectorEnabledState = map[collector.CLIHelper]*bool{}
+	z                     = []prometheus.Collector{}
+	enabledCollectors     = []collector.Collector{}
+	collectors            = []collector.CLIHelper{
+		new(collector.BGPCLIHelper),
+		// new(collector.OSPFCollector),
 	}
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	registry := prometheus.NewRegistry()
-	nc := collector.NewExporter(&collectorEnabledState)
+
+	nc := collector.NewExporter(enabledCollectors)
 	registry.Register(nc)
 
 	gatheres := prometheus.Gatherers{
@@ -38,6 +41,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		ErrorHandling: promhttp.ContinueOnError,
 	}
 	promhttp.HandlerFor(gatheres, handlerOpts).ServeHTTP(w, r)
+}
+
+func collectorsToEnable() {
+	for col, enabled := range collectorEnabledState {
+		if *enabled {
+			if col.Name() == "bgp" {
+				path := *frrVTYSHPath
+				enabledCollectors = append(enabledCollectors, collector.Collector{
+					CLIHelper:     col,
+					PromCollector: collector.NewBGPCollector(path),
+					Errors:        new(collector.BGPErrorCollector),
+				})
+			}
+		}
+	}
 }
 
 func parseFlags() {
@@ -57,6 +75,7 @@ func parseFlags() {
 
 func main() {
 	parseFlags()
+	collectorsToEnable()
 
 	http.HandleFunc(*telemetryPath, handler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
