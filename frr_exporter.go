@@ -10,7 +10,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
 	"github.com/prometheus/common/version"
-	"github.com/tynany/frr_exporter/collector"
+	"github.com/kpchee/frr_exporter/collector"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 

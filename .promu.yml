@@ -2,7 +2,7 @@ go:
     # Whenever the Go version is updated here, .circle/config.yml should also be updated.
     version: 1.13
 repository:
-    path: github.com/tynany/frr_exporter
+    path: github.com/kpchee/frr_exporter
 build:
     binaries:
         - name: frr_exporter

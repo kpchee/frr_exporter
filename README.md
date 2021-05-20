@@ -118,7 +118,7 @@ To enable `frr_bgp_peer_types_up`, use the `--collector.bgp.peer-types` flag.
 ## Development
 ### Building
 ```
-go get github.com/tynany/frr_exporter
+go get github.com/kpchee/frr_exporter
 cd ${GOPATH}/src/github.com/prometheus/frr_exporter
 go build
 ```

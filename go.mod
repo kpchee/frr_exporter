@@ -1,4 +1,4 @@
-module github.com/tynany/frr_exporter
+module github.com/kpchee/frr_exporter
 
 go 1.13
 
