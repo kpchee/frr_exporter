@@ -127,27 +127,27 @@ func (*BGP6Collector) CollectTotalErrors() float64 {
 }
 
 // BGPL2VPNCollector collects BGP metrics, implemented as per prometheus.Collector interface.
-type BGPL2VPNCollector struct{}
+// type BGPL2VPNCollector struct{}
 
-// NewBGPL2VPNCollector returns a BGPL2VPNCollector struct.
-func NewBGPL2VPNCollector() *BGPL2VPNCollector {
-	return &BGPL2VPNCollector{}
-}
+// // NewBGPL2VPNCollector returns a BGPL2VPNCollector struct.
+// func NewBGPL2VPNCollector() *BGPL2VPNCollector {
+// 	return &BGPL2VPNCollector{}
+// }
 
-// Name of the collector. Used to populate flag name.
-func (*BGPL2VPNCollector) Name() string {
-	return bgpSubsystem + "l2vpn"
-}
+// // Name of the collector. Used to populate flag name.
+// func (*BGPL2VPNCollector) Name() string {
+// 	return bgpSubsystem + "l2vpn"
+// }
 
-// Help describes the metrics this collector scrapes. Used to populate flag help.
-func (*BGPL2VPNCollector) Help() string {
-	return "Collect BGP L2VPN Metrics"
-}
+// // Help describes the metrics this collector scrapes. Used to populate flag help.
+// func (*BGPL2VPNCollector) Help() string {
+// 	return "Collect BGP L2VPN Metrics"
+// }
 
-// EnabledByDefault describes whether this collector is enabled by default. Used to populate flag default.
-func (*BGPL2VPNCollector) EnabledByDefault() bool {
-	return false
-}
+// // EnabledByDefault describes whether this collector is enabled by default. Used to populate flag default.
+// func (*BGPL2VPNCollector) EnabledByDefault() bool {
+// 	return false
+// }
 
 // Describe implemented as per the prometheus.Collector interface.
 // func (*BGPL2VPNCollector) Describe(ch chan<- *prometheus.Desc) {
