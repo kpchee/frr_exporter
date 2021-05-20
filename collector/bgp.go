@@ -222,14 +222,14 @@ func execVtyshCommand(args ...string) ([]byte, error) {
 // }
 
 // CollectErrors returns what errors have been gathered.
-func (*BGPL2VPNCollector) CollectErrors() []error {
-	return bgpL2VPNErrors
-}
+// func (*BGPL2VPNCollector) CollectErrors() []error {
+// 	return bgpL2VPNErrors
+// }
 
-// CollectTotalErrors returns total errors.
-func (*BGPL2VPNCollector) CollectTotalErrors() float64 {
-	return totalBGPL2VPNErrors
-}
+// // CollectTotalErrors returns total errors.
+// func (*BGPL2VPNCollector) CollectTotalErrors() float64 {
+// 	return totalBGPL2VPNErrors
+// }
 
 func getBgpDesc() map[string]*prometheus.Desc {
 	if bgpDesc != nil {
