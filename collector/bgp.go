@@ -150,18 +150,18 @@ func (*BGPL2VPNCollector) EnabledByDefault() bool {
 }
 
 // Describe implemented as per the prometheus.Collector interface.
-func (*BGPL2VPNCollector) Describe(ch chan<- *prometheus.Desc) {
-	for _, desc := range getBgpDesc() {
-		ch <- desc
-	}
-	for _, desc := range getBgpL2vpnDesc() {
-		ch <- desc
-	}
-}
+// func (*BGPL2VPNCollector) Describe(ch chan<- *prometheus.Desc) {
+// 	for _, desc := range getBgpDesc() {
+// 		ch <- desc
+// 	}
+// 	for _, desc := range getBgpL2vpnDesc() {
+// 		ch <- desc
+// 	}
+// }
 
-func getBgpL2vpnEvpnSummary() ([]byte, error) {
-	return execVtyshCommand("-c", "show evpn vni json")
-}
+// func getBgpL2vpnEvpnSummary() ([]byte, error) {
+// 	return execVtyshCommand("-c", "show evpn vni json")
+// }
 
 type vxLanStats struct {
 	Vni            int
@@ -184,26 +184,26 @@ func execVtyshCommand(args ...string) ([]byte, error) {
 	return output, nil
 }
 
-func processBgpL2vpnEvpnSummary(ch chan<- prometheus.Metric, jsonBGPL2vpnEvpnSum []byte) error {
-	var jsonMap map[string]vxLanStats
-	bgpL2vpnDesc := getBgpL2vpnDesc()
-	if err := json.Unmarshal(jsonBGPL2vpnEvpnSum, &jsonMap); err != nil {
-		return fmt.Errorf("cannot unmarshal outputs of 'show evpn vni json': %s", err)
-	}
+// func processBgpL2vpnEvpnSummary(ch chan<- prometheus.Metric, jsonBGPL2vpnEvpnSum []byte) error {
+// 	var jsonMap map[string]vxLanStats
+// 	bgpL2vpnDesc := getBgpL2vpnDesc()
+// 	if err := json.Unmarshal(jsonBGPL2vpnEvpnSum, &jsonMap); err != nil {
+// 		return fmt.Errorf("cannot unmarshal outputs of 'show evpn vni json': %s", err)
+// 	}
 
-	for _, vxLanStat := range jsonMap {
-		bgpL2vpnLabels := []string{strconv.Itoa(vxLanStat.Vni), vxLanStat.VxlanType, vxLanStat.VxlanIf, vxLanStat.TenantVrf}
-		newGauge(ch, bgpL2vpnDesc["numMacs"], vxLanStat.NumMacs, bgpL2vpnLabels...)
-		newGauge(ch, bgpL2vpnDesc["numArpNd"], vxLanStat.NumArpNd, bgpL2vpnLabels...)
-		remoteVteps, ok := vxLanStat.NumRemoteVteps.(float64)
-		if !ok {
-			remoteVteps = -1
-		}
-		newGauge(ch, bgpL2vpnDesc["numRemoteVteps"], remoteVteps, bgpL2vpnLabels...)
+// 	for _, vxLanStat := range jsonMap {
+// 		bgpL2vpnLabels := []string{strconv.Itoa(vxLanStat.Vni), vxLanStat.VxlanType, vxLanStat.VxlanIf, vxLanStat.TenantVrf}
+// 		newGauge(ch, bgpL2vpnDesc["numMacs"], vxLanStat.NumMacs, bgpL2vpnLabels...)
+// 		newGauge(ch, bgpL2vpnDesc["numArpNd"], vxLanStat.NumArpNd, bgpL2vpnLabels...)
+// 		remoteVteps, ok := vxLanStat.NumRemoteVteps.(float64)
+// 		if !ok {
+// 			remoteVteps = -1
+// 		}
+// 		newGauge(ch, bgpL2vpnDesc["numRemoteVteps"], remoteVteps, bgpL2vpnLabels...)
 
-	}
-	return nil
-}
+// 	}
+// 	return nil
+// }
 
 // Collect implemented as per the prometheus.Collector interface.
 func (c *BGPL2VPNCollector) Collect(ch chan<- prometheus.Metric) {
@@ -264,18 +264,18 @@ func getBgpDesc() map[string]*prometheus.Desc {
 	return bgpDesc
 }
 
-func getBgpL2vpnDesc() map[string]*prometheus.Desc {
-	if bgpL2vpnDesc != nil {
-		return bgpL2vpnDesc
-	}
-	bgpL2vpnLabels := []string{"vni", "type", "vxlanIf", "tenantVrf"}
-	bgpL2vpnDesc = map[string]*prometheus.Desc{
-		"numMacs":        colPromDesc(bgpL2vpnMetricPrefix, "mac_count_total", "Number of known MAC addresses", bgpL2vpnLabels),
-		"numArpNd":       colPromDesc(bgpL2vpnMetricPrefix, "arp_nd_count_total", "Number of ARP / ND entries", bgpL2vpnLabels),
-		"numRemoteVteps": colPromDesc(bgpL2vpnMetricPrefix, "remote_vtep_count_total", "Number of known remote VTEPs. A value of -1 indicates a non-integer output from FRR, such as n/a.", bgpL2vpnLabels),
-	}
-	return bgpL2vpnDesc
-}
+// func getBgpL2vpnDesc() map[string]*prometheus.Desc {
+// 	if bgpL2vpnDesc != nil {
+// 		return bgpL2vpnDesc
+// 	}
+// 	bgpL2vpnLabels := []string{"vni", "type", "vxlanIf", "tenantVrf"}
+// 	bgpL2vpnDesc = map[string]*prometheus.Desc{
+// 		"numMacs":        colPromDesc(bgpL2vpnMetricPrefix, "mac_count_total", "Number of known MAC addresses", bgpL2vpnLabels),
+// 		"numArpNd":       colPromDesc(bgpL2vpnMetricPrefix, "arp_nd_count_total", "Number of ARP / ND entries", bgpL2vpnLabels),
+// 		"numRemoteVteps": colPromDesc(bgpL2vpnMetricPrefix, "remote_vtep_count_total", "Number of known remote VTEPs. A value of -1 indicates a non-integer output from FRR, such as n/a.", bgpL2vpnLabels),
+// 	}
+// 	return bgpL2vpnDesc
+// }
 
 func collectBGP(ch chan<- prometheus.Metric, AFI string) {
 	SAFI := ""
@@ -283,7 +283,7 @@ func collectBGP(ch chan<- prometheus.Metric, AFI string) {
 	totalErrors := 0.0
 
 	if (AFI == "ipv4") || (AFI == "ipv6") {
-		SAFI = "unicast"
+		SAFI = "encap"
 
 	} else if AFI == "l2vpn" {
 		SAFI = "evpn"
