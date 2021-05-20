@@ -206,20 +206,20 @@ func execVtyshCommand(args ...string) ([]byte, error) {
 // }
 
 // Collect implemented as per the prometheus.Collector interface.
-func (c *BGPL2VPNCollector) Collect(ch chan<- prometheus.Metric) {
-	collectBGP(ch, "l2vpn")
+// func (c *BGPL2VPNCollector) Collect(ch chan<- prometheus.Metric) {
+// 	collectBGP(ch, "l2vpn")
 
-	jsonBGPL2vpnEvpnSum, err := getBgpL2vpnEvpnSummary()
-	if err != nil {
-		totalBGPL2VPNErrors++
-		bgpL2VPNErrors = append(bgpL2VPNErrors, fmt.Errorf("cannot execute 'show evpn vni json': %s", err))
-	} else if len(jsonBGPL2vpnEvpnSum) != 0 {
-		if err := processBgpL2vpnEvpnSummary(ch, jsonBGPL2vpnEvpnSum); err != nil {
-			totalBGPL2VPNErrors++
-			bgpL2VPNErrors = append(bgpL2VPNErrors, err)
-		}
-	}
-}
+// 	jsonBGPL2vpnEvpnSum, err := getBgpL2vpnEvpnSummary()
+// 	if err != nil {
+// 		totalBGPL2VPNErrors++
+// 		bgpL2VPNErrors = append(bgpL2VPNErrors, fmt.Errorf("cannot execute 'show evpn vni json': %s", err))
+// 	} else if len(jsonBGPL2vpnEvpnSum) != 0 {
+// 		if err := processBgpL2vpnEvpnSummary(ch, jsonBGPL2vpnEvpnSum); err != nil {
+// 			totalBGPL2VPNErrors++
+// 			bgpL2VPNErrors = append(bgpL2VPNErrors, err)
+// 		}
+// 	}
+// }
 
 // CollectErrors returns what errors have been gathered.
 func (*BGPL2VPNCollector) CollectErrors() []error {
